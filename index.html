@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bar Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div style="width: 80%; margin: 0 auto;">
+        <select id="source-selector">
+            <option value="TFOS">TFOS</option>
+            <option value="MARTINI">MARTINI</option>
+        </select>
+        <canvas id="myChart"></canvas>
+    </div>
+
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var data = {};
+        var options = {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        };
+        var myChart;
+
+        // Sample data for TFOS and MARTINI
+        var chartData = {
+            TFOS: {
+                labels: ['gridID', 'originating System', 'productTypeActualValue', 'sourceSystem', 'eventype', 'template'],
+                datasets: [
+                    {
+                        label: 'Total record',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1,
+                        data: [14751, 16210, 16257, 16257, 16257, 16257],
+                    },
+                    {
+                        label: 'Distinct record',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1,
+                        data: [1, 6, 10, 2, 5, 7],
+                    },
+                    {
+                        label: 'Missing record',
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1,
+                        data: [1526, 47, 0, 0, 0, 0],
+                    }
+                ]
+            },
+            MARTINI: {
+                labels: ['gridID', 'originating System', 'productTypeActualValue', 'sourceSystem', 'eventype', 'template'],
+                datasets: [
+                    {
+                        label: 'Total record',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1,
+                        data: [1944048, 11910, 944057, 944057, 944057, 944057],
+                    },
+                    {
+                        label: 'Distinct record',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1,
+                        data: [12, 1, 15, 1, 9, 3],
+                    },
+                    {
+                        label: 'Missing record',
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1,
+                        data: [9, 932141, 0, 0, 0, 0],
+                    }
+                ]
+            }
+        };
+
+        // Create a chart based on the selected source
+        function createChart(selectedSource) {
+            var sourceData = chartData[selectedSource];
+
+            if (myChart) {
+                myChart.destroy();
+            }
+
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: sourceData.labels,
+                    datasets: sourceData.datasets,
+                },
+                options: options
+            });
+        }
+
+        // Event listener for source selection
+        document.getElementById('source-selector').addEventListener('change', function () {
+            var selectedSource = this.value;
+            createChart(selectedSource);
+        });
+
+        // Initial chart creation
+        createChart('TFOS');
+    </script>
+</body>
+</html>
